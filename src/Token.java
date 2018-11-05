@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Token {
 
     private String name;
@@ -27,18 +25,8 @@ public class Token {
         this.value = value;
     }
 
-
-
     @Override
     public String toString() {
         return name+": "+value;
-    }
-
-    //this is bad practice i think, returning null
-    public Token returnEmptyToken(){
-        if(this.name.equals("num") && this.value.equals("")){
-            return this;
-        }
-        return null;
     }
 }

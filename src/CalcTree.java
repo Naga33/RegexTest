@@ -22,7 +22,7 @@ public class CalcTree {
         return this.value;
     }
 
-    //slides had this method as static rather than public
+    //lecture slides had this method as static rather than public. why?
     public Double eval(CalcTree tree){
         if(tree.getValue().equals("/")){
             return eval(tree.getLeft())/eval(tree.getRight());

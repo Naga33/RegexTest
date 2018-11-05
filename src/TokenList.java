@@ -7,8 +7,6 @@ public class TokenList {
     private String expression;
     private RegexList regexList = RegexList.getInstance();
     private ArrayList<Token> tokenArrayList = new ArrayList<>();
-    private Matcher matcher;
-    private String exprExtract;
 
     private TokenList(String expression){
         this.expression = expression;
@@ -31,11 +29,11 @@ public class TokenList {
             for (Regex currentRegex:regexList.getRegexArrayList()
             ) {
                 //compile regex string and compare to expression
-                matcher = currentRegex.getPattern().matcher(expression);
+                Matcher matcher = currentRegex.getPattern().matcher(expression);
 
                 if(matcher.find()){
                     //extract substring from expression
-                    exprExtract = matcher.group(0);
+                    String exprExtract = matcher.group(0);
 
                     //add substring and token type to token list
                     tokenArrayList.add(new Token(currentRegex.getName(), exprExtract));

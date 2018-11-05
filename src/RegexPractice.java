@@ -8,6 +8,5 @@ public class RegexPractice {
 
         Calculator calculator = Calculator.getInstance(expr);
         calculator.solveExpression();
-
     }
 }
