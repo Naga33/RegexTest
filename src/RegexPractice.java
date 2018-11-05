@@ -236,7 +236,7 @@ public class RegexPractice {
                     Double result = calculation.eval(calculation);//this can't be good practice...
                     System.out.println("\n\nResult = "+result);
 
-                    Token resultToken = new Token("num",result.toString());
+                    Token resultToken = new Token("num",result.toString());//use get and set method to prevent making new token in memory
 
                     tokenList.set(i-1, resultToken);
                     tokenList.remove(i);
@@ -245,6 +245,35 @@ public class RegexPractice {
                     i=0;
                 }
             }
+
+            for (int i = 1; i < tokenList.size()-1; i++) {
+
+                //print
+                System.out.println("\n\nPrinting tokenList");
+                for (Token token:tokenList
+                ) {
+                    System.out.println(token.toString());
+                }
+                System.out.println("\n\nfor loop iteration: "+i);
+
+
+                Token currentToken = tokenList.get(i);
+                Token previousToken = tokenList.get(i-1);
+                Token nextToken = tokenList.get(i+1);
+
+                if(currentToken.getName().equals("assign")){
+                    Double bindValue = Double.parseDouble(nextToken.getValue());
+                    String bindKey = previousToken.getValue();
+                    bindings.put(bindKey,bindValue);
+
+                    tokenList.set(i-1, nextToken);
+                    tokenList.remove(i);
+                    tokenList.remove(i);
+
+                    i=0;
+                }
+            }
+
 
             //print
             System.out.println("\n\nPrinting tokenList");
@@ -268,6 +297,13 @@ public class RegexPractice {
         ) {
             System.out.println("index: "+tokenList.indexOf(token));
             System.out.println(token.toString());
+        }
+        
+        //print bindings
+        System.out.println("\n\nPrinting Bindings");
+        for (String bindingKey:bindings.keySet()
+             ) {
+            System.out.println(bindingKey + " : " + bindings.get(bindingKey));
         }
 
 
