@@ -1,11 +1,11 @@
 public class CalcTree {
 
-    private String origin;
+    private String value;
     private CalcTree left;
     private CalcTree right;
 
-    public CalcTree(String origin, CalcTree left, CalcTree right){
-        this.origin = origin;
+    public CalcTree(String value, CalcTree left, CalcTree right){
+        this.value = value;
         this.left = left;
         this.right = right;
     }
@@ -18,8 +18,26 @@ public class CalcTree {
         return this.right;
     }
 
-    public String getOrigin(){
-        return this.origin;
+    public String getValue(){
+        return this.value;
+    }
+
+    //slides had this method as static rather than public
+    public Double eval(CalcTree tree){
+        if(tree.getValue().equals("/")){
+            return eval(tree.getLeft())/eval(tree.getRight());
+        }
+        if(tree.getValue().equals("*")){
+            return eval(tree.getLeft())*eval(tree.getRight());
+        }
+        if(tree.getValue().equals("+")){
+            return eval(tree.getLeft())+eval(tree.getRight());
+        }
+
+        if(tree.getValue().equals("-")){
+            return eval(tree.getLeft())-eval(tree.getRight());
+        }
+        return Double.parseDouble(tree.getValue());
     }
 
 

@@ -1,11 +1,13 @@
+import java.util.ArrayList;
+
 public class Token {
 
     private String name;
     private String value;
 
-    public Token(String aType, String aValue){
+    public Token(String aName, String aValue){
 
-        name = aType;
+        name = aName;
         value = aValue;
     }
 
@@ -17,8 +19,20 @@ public class Token {
         return value;
     }
 
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     @Override
     public String toString() {
         return name+": "+value;
+    }
+
+    //this is bad practice i think, returning null
+    public Token returnEmptyToken(){
+        if(this.name.equals("num") && this.value.equals("")){
+            return this;
+        }
+        return null;
     }
 }

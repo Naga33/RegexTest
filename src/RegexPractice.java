@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,13 +48,9 @@ public class RegexPractice {
 
             for (Regex currentRegex:regexList
             ) {
-                System.out.println(currentRegex.toString());
-
                 //compile regex string and compare to expression
                 regexPattern = Pattern.compile(currentRegex.getValue());
                 matcher = regexPattern.matcher(newExpr);
-
-
 
                 if(matcher.find()){
                     //extract substring from expression
@@ -67,24 +61,217 @@ public class RegexPractice {
 
                     //remove substring from expression
                     newExpr = newExpr.replaceFirst(currentRegex.getValue(),"");
-
-                    System.out.println("extract: "+exprExtract);
-                    System.out.println("newString: "+newExpr);
                 }
                 if(newExpr.equals("")){
-                    System.out.println("BREAKING");
                     break;
                 }
             }
         }
 
+        //if array list contains num with no value, remove (hack as result of num regex - fix this properly)
+        ArrayList<Token> removeTokenList = new ArrayList<>();
+        for (Token token:tokenList
+             ) {
+            if(token.getValue().equals("")){
+                removeTokenList.add(token);
+            }
+        }
+        for (Token token:removeTokenList
+             ) {
+            tokenList.remove(token);
+        }
+
+
+        //BINDINGS
+        Map<String,Double> bindings = new HashMap<>();//they use treemap, but that allows duplicate keys and is slower as it retains order. figure out why they use treemap
+        //test
+        bindings.put("_",5.0);
+        bindings.put("a_09", 1.10000001);
+
+
+        //check for ids (could put all tokens in array of something, iterate through token names?)
+        for (Token token:tokenList
+             ) {
+            if(token.getName().equals("id")){
+                //check binding keys for token value
+                if(bindings.containsKey(token.getValue())){
+                    token.setValue(bindings.get(token.getValue()).toString());//must be string till eval?
+                }
+            }
+        }
+
+        //print
+        System.out.println("\n\nPrinting tokenList");
+        for (Token token:tokenList
+        ) {
+            System.out.println(token.toString());
+        }
+
+
+        while(tokenList.size()>1){
+
+            for (int i = 1; i < tokenList.size()-1; i++) {
+
+                //print
+                System.out.println("\n\nPrinting tokenList");
+                for (Token token:tokenList
+                ) {
+                    System.out.println(token.toString());
+                }
+                System.out.println("\n\nfor loop iteration: "+i);
+
+
+                Token currentToken = tokenList.get(i);
+                Token previousToken = tokenList.get(i-1);
+                Token nextToken = tokenList.get(i+1);
+                CalcTree calculation;
+
+                if(currentToken.getName().equals("divide")){
+                    calculation = new CalcTree(currentToken.getValue(),
+                            new CalcTree(previousToken.getValue(), null, null),
+                            new CalcTree(nextToken.getValue(), null, null));
+
+                    Double result = calculation.eval(calculation);//this can't be good practice...
+                    System.out.println("\n\nResult = "+result);
+
+                    Token resultToken = new Token("num",result.toString());
+
+                    tokenList.set(i-1, resultToken);
+                    tokenList.remove(i);
+                    tokenList.remove(i);
+
+                    i=0;
+                }
+            }
+
+            for (int i = 1; i < tokenList.size()-1; i++) {
+
+                //print
+                System.out.println("\n\nPrinting tokenList");
+                for (Token token:tokenList
+                ) {
+                    System.out.println(token.toString());
+                }
+                System.out.println("\n\nfor loop iteration: "+i);
+
+
+                Token currentToken = tokenList.get(i);
+                Token previousToken = tokenList.get(i-1);
+                Token nextToken = tokenList.get(i+1);
+                CalcTree calculation;
+
+                if(currentToken.getName().equals("multiply")){
+                    calculation = new CalcTree(currentToken.getValue(),
+                            new CalcTree(previousToken.getValue(), null, null),
+                            new CalcTree(nextToken.getValue(), null, null));
+
+                    Double result = calculation.eval(calculation);//this can't be good practice...
+                    System.out.println("\n\nResult = "+result);
+
+                    Token resultToken = new Token("num",result.toString());
+
+                    tokenList.set(i-1, resultToken);
+                    tokenList.remove(i);
+                    tokenList.remove(i);
+
+                    i=0;
+                }
+            }
+
+            for (int i = 1; i < tokenList.size()-1; i++) {
+
+                //print
+                System.out.println("\n\nPrinting tokenList");
+                for (Token token:tokenList
+                ) {
+                    System.out.println(token.toString());
+                }
+                System.out.println("\n\nfor loop iteration: "+i);
+
+
+                Token currentToken = tokenList.get(i);
+                Token previousToken = tokenList.get(i-1);
+                Token nextToken = tokenList.get(i+1);
+                CalcTree calculation;
+
+                if(currentToken.getName().equals("sum")){
+                    calculation = new CalcTree(currentToken.getValue(),
+                            new CalcTree(previousToken.getValue(), null, null),
+                            new CalcTree(nextToken.getValue(), null, null));
+
+                    Double result = calculation.eval(calculation);//this can't be good practice...
+                    System.out.println("\n\nResult = "+result);
+
+                    Token resultToken = new Token("num",result.toString());
+
+                    tokenList.set(i-1, resultToken);
+                    tokenList.remove(i);
+                    tokenList.remove(i);
+
+                    i=0;
+                }
+            }
+
+            for (int i = 1; i < tokenList.size()-1; i++) {
+
+                //print
+                System.out.println("\n\nPrinting tokenList");
+                for (Token token:tokenList
+                ) {
+                    System.out.println(token.toString());
+                }
+                System.out.println("\n\nfor loop iteration: "+i);
+
+
+                Token currentToken = tokenList.get(i);
+                Token previousToken = tokenList.get(i-1);
+                Token nextToken = tokenList.get(i+1);
+                CalcTree calculation;
+
+                if(currentToken.getName().equals("subtract")){
+                    calculation = new CalcTree(currentToken.getValue(),
+                            new CalcTree(previousToken.getValue(), null, null),
+                            new CalcTree(nextToken.getValue(), null, null));
+
+                    Double result = calculation.eval(calculation);//this can't be good practice...
+                    System.out.println("\n\nResult = "+result);
+
+                    Token resultToken = new Token("num",result.toString());
+
+                    tokenList.set(i-1, resultToken);
+                    tokenList.remove(i);
+                    tokenList.remove(i);
+
+                    i=0;
+                }
+            }
+
+            //print
+            System.out.println("\n\nPrinting tokenList");
+            for (Token token:tokenList
+            ) {
+                System.out.println("index: "+tokenList.indexOf(token));
+                System.out.println(token.toString());
+            }
+        }//while end
+
+        if(tokenList.size()==1){
+            Double finalResult = Double.parseDouble(tokenList.get(0).getValue());
+            bindings.put("_",finalResult);
+            System.out.println("New binding: "+bindings.get("_"));
+        }//needs to be saved but won't need serialisation in their version.
 
 
         //print
         System.out.println("\n\nPrinting tokenList");
         for (Token token:tokenList
-             ) {
+        ) {
+            System.out.println("index: "+tokenList.indexOf(token));
             System.out.println(token.toString());
         }
+
+
     }
+
+
 }
