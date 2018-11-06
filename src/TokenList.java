@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 
 public class TokenList {
@@ -7,6 +9,7 @@ public class TokenList {
     private String expression;
     private RegexList regexList = RegexList.getInstance();
     private ArrayList<Token> tokenArrayList = new ArrayList<>();
+    private Map<String,Double> bindings = new HashMap<>();
 
     private TokenList(String expression){
         this.expression = expression;
@@ -22,7 +25,6 @@ public class TokenList {
     }
 
     private void createTokenArrayList(){
-        //TODO: split this method up into smaller methods and fix regex hack
 
         while(!expression.equals("")){
 
@@ -46,23 +48,103 @@ public class TokenList {
                 }
             }
         }
+        //removeNumsWithoutValue();
+        replaceIds();
+    }
 
-        //if array list contains num with no value, remove (hack as result of num regex - fix this properly)
+    private void removeNumsWithoutValue(){
+
         ArrayList<Token> removeTokenList = new ArrayList<>();
+
+        //add valueless tokens to removeTokenList
         for (Token token:tokenArrayList
         ) {
             if(token.getValue().equals("")){
                 removeTokenList.add(token);
             }
         }
+
+        //remove valueless tokens from tokenArrayList
         for (Token token:removeTokenList
         ) {
             tokenArrayList.remove(token);
         }
+
     }
+
+    private void replaceIds(){
+        for (Token token:tokenArrayList
+        ) {
+            if(token.getName().equals("id")){
+                //check binding keys for token value
+                if(bindings.containsKey(token.getValue())){
+                    token.setValue(bindings.get(token.getValue()).toString());
+                }
+            }
+        }
+    }
+
+//    public ArrayList<Integer> extractParenthesisExpression(){
+//        ArrayList<Integer> subTokenIndexList = new ArrayList<>();
+//        int outerCount = 0;
+//        int innerCount = 1;
+//        boolean outerCheck = true;
+//        boolean innerCheck = true;
+//
+//        while(outerCheck){
+//            Token currentToken = tokenArrayList.get(outerCount);
+//
+//            if(currentToken.getValue().equals("(")){
+//                //add current token to subTokenList
+//                subTokenIndexList.add(outerCount);
+//
+//                //check each token onwards from this point
+//                while (innerCheck){
+//                    Token nextToken = tokenArrayList.get(innerCount);
+//                    if(nextToken.getValue().equals("(")){
+//                        //clear subTokenList and restart
+//                        subTokenIndexList.clear();
+//                        innerCount++;
+//                    }
+//                    if(nextToken.getValue().equals(")")){
+//                        //add to subTokenIndexList and finish searching
+//                        subTokenIndexList.add(innerCount);
+//                        innerCheck = false;
+//                        outerCheck = false;
+//                    }
+//                    else{
+//                        subTokenIndexList.add(innerCount);
+//                        innerCount++;
+//                    }
+//                }
+//            }
+//            outerCount = outerCount + innerCount;
+//        }
+//        //print
+//        System.out.println("\n\nSubTokenList: ");
+//        for (Integer index:subTokenIndexList
+//        ) {
+//            System.out.println("index: "+ index + "\nToken: "+ tokenArrayList.get(index));
+//        }
+//        return subTokenIndexList;
+//    }
+
 
     public ArrayList<Token> getTokenArrayList(){
         return tokenArrayList;
+    }
+
+    public void updateBindings(String key, Double value){
+        this.bindings.put(key,value);
+        printBindings();
+    }
+
+    private void printBindings() {
+        System.out.println("\n\nPrinting bindings:");
+        for (String bindingKey:bindings.keySet()
+        ) {
+            System.out.println(bindingKey+" : "+bindings.get(bindingKey));
+        }
     }
 
 
